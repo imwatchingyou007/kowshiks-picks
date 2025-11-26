@@ -258,4 +258,3 @@ Let me know which features you'd like me to implement, and I'll add them to your
 - Improve the design further
 
 Just tell me what you want, and I'll make it happen! 🚀
-
