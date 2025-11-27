@@ -154,6 +154,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 : `${index * 0.1}s`;
             observer.observe(el);
         });
+        
+        // About section fade-in animation
+        const aboutContent = document.querySelector('.about-content');
+        if (aboutContent) {
+            aboutContent.style.opacity = '0';
+            aboutContent.style.transform = 'translateY(30px)';
+            aboutContent.style.transition = isMobile 
+                ? 'opacity 0.6s ease-out, transform 0.6s ease-out' 
+                : 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            
+            const aboutObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                        aboutObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            aboutObserver.observe(aboutContent);
+        }
     }
 });
 
