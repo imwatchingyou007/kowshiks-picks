@@ -179,6 +179,35 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ============================================
+// CONTACT FORM HANDLING WITH EMAILJS
+// ============================================
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contact-form");
+    const statusMessage = document.getElementById("status-message");
+    
+    if (!form) return; // if contact form doesn't exist on this page
+    
+    form.addEventListener("submit", function (e) {
+        e.preventDefault(); // stop the page from reloading
+        
+        statusMessage.textContent = "Sending...";
+        statusMessage.className = "status-message";
+        
+        emailjs
+            .sendForm("service_1zj6hhg", "template_m8q6mpb", form)
+            .then(function () {
+                statusMessage.textContent = "Message sent successfully! I'll get back to you soon.";
+                statusMessage.className = "status-message success";
+                form.reset();
+            })
+            .catch(function () {
+                statusMessage.textContent = "Something went wrong. Please try again later.";
+                statusMessage.className = "status-message error";
+            });
+    });
+});
+
+// ============================================
 // NEWSLETTER FORM HANDLING
 // ============================================
 const newsletterForm = document.getElementById('newsletterForm');

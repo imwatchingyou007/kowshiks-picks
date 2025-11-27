@@ -1007,6 +1007,105 @@ section {
 }
 
 /* ============================================
+   CONTACT SECTION - MOBILE FIRST
+   ============================================ */
+.contact-section {
+    background: var(--bg-secondary);
+    padding: var(--spacing-xl) 0;
+}
+
+.contact-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    min-height: 44px;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    transition: var(--transition-normal);
+    -webkit-appearance: none;
+    appearance: none;
+    resize: vertical;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.contact-form textarea {
+    min-height: 150px;
+    padding-top: 1rem;
+    line-height: 1.6;
+}
+
+.contact-form button {
+    margin-top: var(--spacing-xs);
+    width: 100%;
+}
+
+.status-message {
+    text-align: center;
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    border-radius: 12px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-normal);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.status-message.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
+    opacity: 1;
+    visibility: visible;
+}
+
+.status-message.error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ============================================
    NEWSLETTER - MOBILE FIRST
    ============================================ */
 .newsletter {
@@ -1356,6 +1455,17 @@ section {
     .newsletter-input {
         flex: 1;
         min-width: 250px;
+    }
+    
+    /* Contact Form - Desktop */
+    .contact-form {
+        padding: var(--spacing-xl);
+    }
+    
+    .contact-form button {
+        width: auto;
+        min-width: 200px;
+        align-self: flex-start;
     }
     
     .footer-content {

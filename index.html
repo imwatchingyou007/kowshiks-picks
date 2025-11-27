@@ -337,8 +337,28 @@
         </div>
     </section>
 
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="section-header">
+                    <h2 class="section-title">Contact Me</h2>
+                    <p class="section-subtitle">If you have a question, suggestion, or collaboration, send me a message here.</p>
+                </div>
+                <form class="contact-form" id="contact-form">
+                    <input type="text" name="from_name" placeholder="Your Name" required aria-label="Your Name" />
+                    <input type="email" name="reply_to" placeholder="Your Email" required aria-label="Your Email" />
+                    <input type="text" name="subject" placeholder="Subject" aria-label="Subject" />
+                    <textarea name="message" placeholder="Your Message" required aria-label="Your Message"></textarea>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+                <p id="status-message" class="status-message"></p>
+            </div>
+        </div>
+    </section>
+
     <!-- Newsletter / CTA Section -->
-    <section class="newsletter" id="contact">
+    <section class="newsletter">
         <div class="container">
             <div class="newsletter-content">
                 <h2 class="newsletter-title">Stay Updated</h2>
@@ -388,6 +408,16 @@
         </div>
     </footer>
 
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your Public Key
+        (function () {
+            emailjs.init("Zxep3rg4dFIATCWa0"); // ← replace this
+        })();
+    </script>
+    
+    <!-- Your main script -->
     <script src="script.js"></script>
 </body>
 </html>
