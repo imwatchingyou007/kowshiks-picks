@@ -1,4 +1,9 @@
 // ============================================
+// CURRENCY: All prices displayed in INR (₹) - Indian Rupees
+// Currency updated to INR
+// ============================================
+
+// ============================================
 // SMOOTH SCROLLING FOR INTERNAL LINKS
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
@@ -377,6 +382,47 @@ if ('IntersectionObserver' in window) {
     document.querySelectorAll('img[data-src]').forEach(img => {
         imageObserver.observe(img);
     });
+}
+
+// ============================================
+// CURRENCY UTILITIES - INR FORMATTING
+// ============================================
+/**
+ * Format price in Indian Rupees (INR) with Indian numbering system
+ * Currency updated to INR
+ * 
+ * @param {number} amount - The price amount to format
+ * @returns {string} Formatted price string with ₹ symbol (e.g., ₹24,999 or ₹1,99,999)
+ * 
+ * @example
+ * formatPriceINR(24999) // Returns "₹24,999"
+ * formatPriceINR(199999) // Returns "₹1,99,999"
+ */
+function formatPriceINR(amount) {
+    // Convert to number if string
+    const numAmount = typeof amount === 'string' ? parseFloat(amount.replace(/[₹,\s]/g, '')) : amount;
+    
+    // Indian numbering system: first 3 digits, then groups of 2
+    const formatted = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(numAmount);
+    
+    return formatted;
+}
+
+/**
+ * Format price range in INR
+ * Currency updated to INR
+ * 
+ * @param {number} min - Minimum price
+ * @param {number} max - Maximum price
+ * @returns {string} Formatted price range (e.g., "₹24,999 - ₹34,999")
+ */
+function formatPriceRangeINR(min, max) {
+    return `${formatPriceINR(min)} - ${formatPriceINR(max)}`;
 }
 
 // ============================================
