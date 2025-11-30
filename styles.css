@@ -676,6 +676,15 @@ section {
     display: block;
 }
 
+.product-image-responsive {
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+    max-height: 320px;
+    width: 100%;
+    border-radius: 12px;
+}
+
 .image-placeholder {
     color: var(--text-muted);
     font-size: clamp(0.85rem, 3vw, 0.9rem);
