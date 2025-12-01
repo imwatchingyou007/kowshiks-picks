@@ -590,6 +590,9 @@ section {
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
     -webkit-tap-highlight-color: transparent;
 }
 
