@@ -35,6 +35,8 @@
     /* Typography */
     --font-heading: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
+    --font-logo: 'Poppins', sans-serif;
+    --font-display: 'Playfair Display', serif;
     
     /* Mobile-First Spacing (8px base) */
     --spacing-xs: 0.5rem;   /* 8px */
@@ -141,11 +143,24 @@ body {
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     /* Safe area insets for notched devices */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+}
+
+/* Ensure font uniformity across all text elements */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-primary);
+}
+
+p, span, div, a, li, td, th {
+    font-family: var(--font-body);
 }
 
 /* ============================================
@@ -253,41 +268,87 @@ body {
 
 /* Logo - Mobile First */
 .logo-handwritten {
-    font-family: var(--font-body);
-    font-weight: 900;
-    font-size: clamp(0.875rem, 4vw, 1.5rem); /* Responsive from mobile */
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-primary);
-    text-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.1),
-        0 2px 10px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-logo);
+    font-weight: 800;
+    font-size: clamp(1rem, 5vw, 1.75rem); /* Responsive from mobile */
+    letter-spacing: 0.05em;
+    text-transform: none;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #ec4899 50%, #f59e0b 75%, #6366f1 100%);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     display: inline-block;
-    transition: var(--transition-normal);
-    line-height: 1.1;
+    transition: all var(--transition-normal);
+    line-height: 1.2;
     position: relative;
     text-decoration: none;
+    animation: gradientShift 8s ease infinite;
+    filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.3));
+}
+
+.logo-handwritten::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #ec4899 50%, #f59e0b 75%, #6366f1 100%);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: -1;
+    filter: blur(10px);
+    animation: gradientShift 8s ease infinite;
 }
 
 .logo-handwritten::after {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: -6px;
     left: 0;
-    width: 0;
+    width: 100%;
     height: 3px;
-    background: var(--accent-primary);
-    transition: width var(--transition-normal) ease;
-    box-shadow: 0 0 10px var(--accent-primary);
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899, #f59e0b, #6366f1);
+    background-size: 300% 100%;
+    border-radius: 2px;
+    transition: all var(--transition-normal) ease;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    animation: gradientShift 8s ease infinite;
+    opacity: 0.8;
 }
 
-.logo-handwritten:hover::after,
-.logo-handwritten:active::after {
-    width: 100%;
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.logo-handwritten:hover {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 4px 15px rgba(99, 102, 241, 0.5));
+    letter-spacing: 0.08em;
+}
+
+.logo-handwritten:hover::before {
+    opacity: 0.5;
+}
+
+.logo-handwritten:hover::after {
+    height: 4px;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.7);
+    opacity: 1;
 }
 
 .logo-handwritten:active {
-    transform: translateY(-1px);
+    transform: translateY(0px);
 }
 
 /* Mobile Menu - Hidden by default, shown via JS */
@@ -513,6 +574,10 @@ body {
     margin-bottom: var(--spacing-md);
     color: var(--text-primary);
     letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .hero-subheadline {
@@ -675,6 +740,10 @@ section {
     color: var(--text-primary);
     letter-spacing: -0.02em;
     line-height: 1.2;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .section-subtitle {
@@ -888,6 +957,7 @@ section {
     margin-bottom: 0.5rem;
     font-family: var(--font-heading);
     line-height: 1.3;
+    transition: color var(--transition-fast);
 }
 
 .product-name-link {
@@ -899,7 +969,11 @@ section {
 
 .product-name-link:hover {
     color: var(--accent-primary);
-    text-decoration: underline;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .product-description {
@@ -1500,8 +1574,14 @@ section {
 
 .footer-brand.logo-handwritten {
     font-size: clamp(1.1rem, 4vw, 1.4rem);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     font-weight: 800;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #ec4899 50%, #f59e0b 75%, #6366f1 100%);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 8s ease infinite;
 }
 
 .footer-author {
