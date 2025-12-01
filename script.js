@@ -120,7 +120,7 @@ window.addEventListener('scroll', function() {
 });
 
 // ============================================
-// SCROLL ANIMATIONS (FADE IN ON SCROLL) - MOBILE OPTIMIZED
+// SCROLL ANIMATIONS (FADE IN ON SCROLL) - ENHANCED
 // ============================================
 // Reduced motion for mobile performance
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -134,29 +134,52 @@ const observerOptions = {
 const observer = new IntersectionObserver(function(entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('fade-in');
             observer.unobserve(entry.target);
         }
     });
 }, observerOptions);
 
-// Observe elements for scroll animations
+// Enhanced scroll-triggered animations
 document.addEventListener('DOMContentLoaded', function() {
     if (!prefersReducedMotion) {
-        const animatedElements = document.querySelectorAll(
-            '.product-card, .category-card, .article-card, .trust-item'
-        );
-        
-        animatedElements.forEach((el, index) => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)'; // Smaller movement on mobile
+        // Product cards with staggered animation
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach((el, index) => {
             el.style.transition = isMobile 
-                ? 'opacity 0.4s ease, transform 0.4s ease' 
-                : 'opacity 0.6s ease, transform 0.6s ease';
-            el.style.transitionDelay = isMobile 
-                ? `${Math.min(index * 0.05, 0.3)}s` 
-                : `${index * 0.1}s`;
+                ? 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' 
+                : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            el.style.transitionDelay = `${Math.min(index * 0.1, 0.5)}s`;
+            observer.observe(el);
+        });
+        
+        // Category cards
+        const categoryCards = document.querySelectorAll('.category-card');
+        categoryCards.forEach((el, index) => {
+            el.style.transition = isMobile 
+                ? 'opacity 0.5s ease, transform 0.5s ease' 
+                : 'opacity 0.7s ease, transform 0.7s ease';
+            el.style.transitionDelay = `${Math.min(index * 0.08, 0.4)}s`;
+            observer.observe(el);
+        });
+        
+        // Article cards
+        const articleCards = document.querySelectorAll('.article-card');
+        articleCards.forEach((el, index) => {
+            el.style.transition = isMobile 
+                ? 'opacity 0.5s ease, transform 0.5s ease' 
+                : 'opacity 0.7s ease, transform 0.7s ease';
+            el.style.transitionDelay = `${Math.min(index * 0.08, 0.4)}s`;
+            observer.observe(el);
+        });
+        
+        // Trust items with enhanced animation
+        const trustItems = document.querySelectorAll('.trust-item');
+        trustItems.forEach((el, index) => {
+            el.style.transition = isMobile 
+                ? 'opacity 0.6s ease-out, transform 0.6s ease-out' 
+                : 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            el.style.transitionDelay = `${Math.min(index * 0.1, 0.5)}s`;
             observer.observe(el);
         });
         
@@ -424,6 +447,77 @@ function formatPriceINR(amount) {
 function formatPriceRangeINR(min, max) {
     return `${formatPriceINR(min)} - ${formatPriceINR(max)}`;
 }
+
+// ============================================
+// DARK/LIGHT MODE TOGGLE
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const html = document.documentElement;
+    
+    // Check for saved theme preference or default to dark mode
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', currentTheme);
+    updateThemeIcon(currentTheme);
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            // Add a subtle animation
+            themeToggle.style.transform = 'scale(0.9) rotate(180deg)';
+            setTimeout(() => {
+                themeToggle.style.transform = '';
+            }, 200);
+        });
+    }
+    
+    function updateThemeIcon(theme) {
+        if (themeIcon) {
+            themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+    }
+});
+
+// ============================================
+// SCROLL PROGRESS INDICATOR
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollProgress = document.getElementById('scrollProgress');
+    
+    if (scrollProgress) {
+        function updateScrollProgress() {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollableHeight = documentHeight - windowHeight;
+            const progress = (scrollTop / scrollableHeight) * 100;
+            
+            scrollProgress.style.width = Math.min(progress, 100) + '%';
+        }
+        
+        // Throttle scroll events for better performance
+        let ticking = false;
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    updateScrollProgress();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+        
+        // Initial update
+        updateScrollProgress();
+    }
+});
 
 // ============================================
 // CONSOLE MESSAGE
