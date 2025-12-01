@@ -680,8 +680,10 @@ section {
     display: block;
     margin: 0 auto;
     object-fit: contain;
-    max-height: 320px;
     width: 100%;
+    max-width: 460px;
+    max-height: 320px;
+    height: auto;
     border-radius: 12px;
 }
 
