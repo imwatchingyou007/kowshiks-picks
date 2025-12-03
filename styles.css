@@ -662,11 +662,14 @@ p, span, div, a, li, td, th {
     background: linear-gradient(135deg, #ff9900, #ffad33);
     color: #000;
     font-weight: 700;
-    margin-top: var(--spacing-sm);
+    margin-top: auto; /* ✅ Push to bottom */
     box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
     position: relative;
     overflow: hidden;
     transition: all var(--transition-normal);
+    width: 100%;
+    max-width: 100%; /* ✅ Never exceed container */
+    box-sizing: border-box;
 }
 
 .btn-amazon::before {
@@ -772,26 +775,25 @@ section {
 
 .product-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(15px); /* Reduced for mobile */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
-    border-radius: 20px; /* Smaller on mobile */
+    border-radius: 20px;
     padding: var(--spacing-md);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     animation: fadeInUp 0.6s ease-out backwards;
     box-shadow: var(--shadow-md);
     position: relative;
-    overflow: visible;
+    overflow: hidden; /* ✅ Keep all content inside */
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
     -webkit-tap-highlight-color: transparent;
-    transform-style: preserve-3d;
-    perspective: 1000px;
     opacity: 0;
     transform: translateY(30px);
-    height: 100%; /* Make all cards equal height */
-    min-height: 520px; /* Minimum height for consistency */
+    height: 100%;
+    min-height: 520px;
+    isolation: isolate; /* ✅ Create stacking context */
 }
 
 .product-card.fade-in {
@@ -800,30 +802,35 @@ section {
 }
 
 .product-card:active {
-    transform: scale(0.98);
+    transform: scale(0.98); /* ✅ Scale down prevents overflow */
 }
 
 /* Enhanced Product Card Hover Effects */
 @media (hover: hover) and (pointer: fine) {
     .product-card:hover {
-        transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
+        transform: translateY(-8px);
         box-shadow: var(--shadow-lg), 0 0 30px rgba(99, 102, 241, 0.3);
         border-color: var(--accent-primary);
         background: var(--glass-hover);
     }
     
-    .product-card:hover::before {
+    .product-card::before {
         content: '';
         position: absolute;
-        top: -2px;
-        left: -2px;
-        right: -2px;
-        bottom: -2px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-        border-radius: 22px;
+        border-radius: 20px;
         z-index: -1;
-        opacity: 0.3;
-        filter: blur(8px);
+        opacity: 0;
+        transition: opacity var(--transition-normal);
+        pointer-events: none;
+    }
+    
+    .product-card:hover::before {
+        opacity: 0.1;
     }
 }
 
@@ -837,8 +844,8 @@ section {
 /* Product Badges */
 .product-badge {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 16px;
+    right: 16px;
     padding: 0.4rem 0.75rem;
     border-radius: 16px;
     font-size: clamp(0.65rem, 2.5vw, 0.75rem);
@@ -850,6 +857,10 @@ section {
     -webkit-backdrop-filter: blur(10px);
     box-shadow: var(--shadow-sm);
     animation: badgePulse 2s ease-in-out infinite;
+    max-width: calc(100% - 32px); /* ✅ Prevent overflow */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .product-badge.best-seller {
@@ -876,7 +887,7 @@ section {
         box-shadow: var(--shadow-sm);
     }
     50% {
-        transform: scale(1.05);
+        transform: scale(1.02); /* ✅ Reduced to prevent overflow */
         box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
     }
 }
@@ -892,26 +903,29 @@ section {
 
 .product-image {
     width: 100%;
-    height: 220px; /* Fixed consistent height */
+    height: 220px;
     min-height: 220px;
     max-height: 220px;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: hidden; /* ✅ Strict containment */
     margin-bottom: var(--spacing-sm);
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0;
 }
 
 .product-image img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Keep entire image visible */
+    object-fit: contain;
     display: block;
-    border-radius: 12px;
+    padding: 8px; /* ✅ Inner padding for better containment */
+    box-sizing: border-box;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 /* Clickable product image link */
@@ -924,19 +938,22 @@ section {
     text-decoration: none;
     transition: var(--transition-normal);
     cursor: pointer;
+    overflow: hidden;
 }
 
 .product-image-link:hover {
     opacity: 0.9;
-    transform: scale(1.02);
 }
 
 .product-image-link img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    border-radius: 12px;
+    object-fit: contain;
     display: block;
+    padding: 8px;
+    box-sizing: border-box;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .product-image-responsive {
@@ -960,23 +977,30 @@ section {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
-    flex: 1; /* Allow to grow and fill space */
-    min-height: 0; /* Allow proper flexbox behavior */
+    flex: 1;
+    min-height: 0;
+    overflow: hidden; /* ✅ Contain all children */
+    width: 100%;
+    max-width: 100%;
 }
 
 .product-name {
-    font-size: clamp(1.1rem, 4vw, 1.3rem); /* Mobile-first */
+    font-size: clamp(1.1rem, 4vw, 1.3rem);
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
-    min-height: 2.6rem; /* Consistent height for 2 lines */
+    min-height: 2.6rem;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Max 2 lines */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     font-family: var(--font-heading);
     line-height: 1.3;
     transition: color var(--transition-fast);
+    word-wrap: break-word; /* ✅ Break long words */
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
 }
 
 .product-name-link {
@@ -996,16 +1020,20 @@ section {
 }
 
 .product-description {
-    font-size: clamp(0.9rem, 3vw, 0.95rem); /* Mobile-first */
+    font-size: clamp(0.9rem, 3vw, 0.95rem);
     color: var(--text-secondary);
     line-height: 1.6;
     margin-bottom: var(--spacing-xs);
-    flex: 1; /* Allow to grow */
-    max-height: 120px; /* Limit height for consistency */
-    overflow: hidden; /* Hide overflow */
+    flex: 1;
+    max-height: 120px;
+    overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 5; /* Show max 5 lines */
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
+    word-wrap: break-word; /* ✅ Break long words */
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
 }
 
 /* Product Features List */
@@ -1039,6 +1067,8 @@ section {
     align-items: center;
     gap: var(--spacing-xs);
     margin-bottom: var(--spacing-xs);
+    flex-wrap: wrap; /* ✅ Wrap if needed */
+    max-width: 100%;
 }
 
 .stars {
@@ -1049,13 +1079,18 @@ section {
 .rating-text {
     font-size: clamp(0.8rem, 2.5vw, 0.85rem);
     color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .product-price {
-    font-size: clamp(1.1rem, 4vw, 1.2rem); /* Mobile-first */
+    font-size: clamp(1.1rem, 4vw, 1.2rem);
     font-weight: 700;
     color: var(--accent-primary);
     margin-bottom: var(--spacing-xs);
+    word-wrap: break-word; /* ✅ Break if needed */
+    max-width: 100%;
 }
 
 /* ============================================
@@ -1820,6 +1855,11 @@ section {
         max-height: 250px;
     }
     
+    .product-image img,
+    .product-image-link img {
+        padding: 12px; /* ✅ More padding on larger screens */
+    }
+    
     .categories-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -1903,8 +1943,14 @@ section {
         max-height: 280px;
     }
     
+    .product-image img,
+    .product-image-link img {
+        padding: 16px; /* ✅ Even more padding on desktop */
+    }
+    
     .product-card {
         min-height: 580px;
+        padding: var(--spacing-lg); /* ✅ More padding on desktop */
     }
     
     .categories-grid {
